@@ -1,6 +1,7 @@
 package lk.sliit.hotel.entity.restaurant.onlineTableReservation;
 
-import lk.sliit.hotelManagement.entity.restaurant.OnlineCustomer;
+import lk.sliit.hotel.entity.restaurant.OnlineCustomer;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;

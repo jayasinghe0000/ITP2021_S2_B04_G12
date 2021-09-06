@@ -1,10 +1,10 @@
 package lk.sliit.hotel.controller.RestaurantController;
 
-import lk.sliit.hotelManagement.controller.SuperController;
-import lk.sliit.hotelManagement.dto.restaurant.RestaurantTableDTO;
-import lk.sliit.hotelManagement.dto.restaurant.restaurantCounterTable.CounterTableReservationDTO;
-import lk.sliit.hotelManagement.service.custom.IndexLoginBO;
-import lk.sliit.hotelManagement.service.custom.RestaurantBO;
+import lk.sliit.hotel.controller.SuperController;
+import lk.sliit.hotel.dto.restaurant.RestaurantTableDTO;
+import lk.sliit.hotel.dto.restaurant.restaurantCounterTable.CounterTableReservationDTO;
+import lk.sliit.hotel.service.custom.IndexLoginBO;
+import lk.sliit.hotel.service.custom.RestaurantBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +28,9 @@ public class RestaurantTableController {
     @Autowired
     RestaurantBO restaurantBO;
 
-    @GetMapping("/restaurantTable")//Load Laundry Table
+
+    //load restaurantTable.jsp and display list of tables
+    @GetMapping("/restaurantTable")
     public String loginPage(Model model) {
         model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
         List<RestaurantTableDTO> tableList = restaurantBO.findAllTable();
@@ -36,6 +38,8 @@ public class RestaurantTableController {
         return "restaurantTable";
     }
 
+
+    //save new tables to the database
     @PostMapping("/saveTable")
     public String addNewTable(Model model, @ModelAttribute RestaurantTableDTO restaurantTableDTO) {
          try {
@@ -62,6 +66,7 @@ public class RestaurantTableController {
         return "redirect:/restaurantTable";
     }
 
+    //delete tables
     @GetMapping(value = "deleteTable/{tableId}")//Delete Table
     public void deleteTable(@PathVariable("tableId") int tableId, HttpServletResponse response) {
         restaurantBO.deleteTable(tableId);
@@ -72,6 +77,7 @@ public class RestaurantTableController {
         }
     }
 
+    //get all booked tables
     @GetMapping("/restaurantTableIndex")
     public String restaurantTableIndex(Model model) {//Find Today Booked Tables
         model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
@@ -80,6 +86,7 @@ public class RestaurantTableController {
         return "restaurantTableIndex";
     }
 
+    //load reservation dashboard
     @GetMapping("/restaurantTableReservation")
     public String restaurantTableReservation(Model model) {
         model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
@@ -87,6 +94,7 @@ public class RestaurantTableController {
     }
 
 
+    //get available tables and display
     @GetMapping("/counterTableDetails")//Find Available Tables
     public String checkTimeForTable(@ModelAttribute CounterTableReservationDTO counterTableReservationDTO,
                                     Model model) {
@@ -106,6 +114,7 @@ public class RestaurantTableController {
         return "counterTableDetails";
     }
 
+    //save reservations
     @PostMapping("/saveCounterTable")//SAve Table in counter Table Reservations
     public String saveOnlineTable(@ModelAttribute CounterTableReservationDTO onlineOrderDTO, HttpSession session) {
 

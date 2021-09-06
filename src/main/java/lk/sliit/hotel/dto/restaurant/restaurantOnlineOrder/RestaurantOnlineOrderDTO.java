@@ -1,6 +1,6 @@
 package lk.sliit.hotel.dto.restaurant.restaurantOnlineOrder;
 
-import lk.sliit.hotelManagement.entity.restaurant.onlineOrder.RestaurantOnlineOrderDetails;
+import lk.sliit.hotel.entity.restaurant.onlineOrder.RestaurantOnlineOrderDetails;
 
 import java.util.Date;
 import java.util.List;

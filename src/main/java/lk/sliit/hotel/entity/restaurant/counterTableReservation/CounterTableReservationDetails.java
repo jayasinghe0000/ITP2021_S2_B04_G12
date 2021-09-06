@@ -1,6 +1,6 @@
 package lk.sliit.hotel.entity.restaurant.counterTableReservation;
 
-import lk.sliit.hotelManagement.entity.restaurant.RestaurantTable;
+import lk.sliit.hotel.entity.restaurant.RestaurantTable;
 
 import javax.persistence.*;
 

@@ -1,8 +1,7 @@
 package lk.sliit.hotel.entity.restaurant;
 
-import lk.sliit.hotelManagement.entity.restaurant.counterTableReservation.CounterTableReservationDetails;
-import lk.sliit.hotelManagement.entity.restaurant.onlineTableReservation.OnlineTableReservationDetails;
-
+import lk.sliit.hotel.entity.restaurant.counterTableReservation.CounterTableReservationDetails;
+import lk.sliit.hotel.entity.restaurant.onlineTableReservation.OnlineTableReservationDetails;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;

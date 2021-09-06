@@ -1,8 +1,7 @@
 package lk.sliit.hotel.entity.restaurant.counterOrder;
 
 
-import lk.sliit.hotelManagement.entity.kitchen.FoodItem;
-
+import lk.sliit.hotel.entity.kitchen.FoodItem;
 import javax.persistence.*;
 
 @Entity
