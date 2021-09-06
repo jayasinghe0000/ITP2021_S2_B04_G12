@@ -1,5 +1,14 @@
 package lk.sliit.hotel.dto.kitchen;
 
+import lk.sliit.hotelManagement.entity.kitchen.Menu;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class FoodItemDTO {
     private int itemId;
     private String itemName;

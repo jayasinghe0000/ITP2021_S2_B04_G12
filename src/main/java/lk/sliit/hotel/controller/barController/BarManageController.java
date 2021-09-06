@@ -1,4 +1,4 @@
-package lk.sliit.hotel.controller.foodAndBevarage.barController;
+package lk.sliit.hotel.controller.barController;
 
 import lk.sliit.hotelManagement.controller.SuperController;
 import lk.sliit.hotelManagement.service.custom.IndexLoginBO;
@@ -8,12 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class BarBill {
-    @Autowired//Load Bar Bill
+public class BarManageController {
+    @Autowired
     IndexLoginBO indexLoginBO;
-    @GetMapping("/barBill")
-    public String loginPage(Model model){
+
+
+    @GetMapping("/bar")//Load Bar Dashboard
+    public String loginPage(Model model) {
         model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
-        return "barBill";
+        return "bar";
     }
 }

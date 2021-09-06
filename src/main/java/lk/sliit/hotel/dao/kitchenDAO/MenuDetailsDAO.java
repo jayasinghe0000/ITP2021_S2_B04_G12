@@ -3,6 +3,8 @@ package lk.sliit.hotel.dao.kitchenDAO;
 import lk.sliit.hotelManagement.entity.kitchen.FoodItem;
 import lk.sliit.hotelManagement.entity.kitchen.Menu;
 import lk.sliit.hotelManagement.entity.kitchen.MenuDetails;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface MenuDetailsDAO extends CrudRepository<MenuDetails, Integer> {

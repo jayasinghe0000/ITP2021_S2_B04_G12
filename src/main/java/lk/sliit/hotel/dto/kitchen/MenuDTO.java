@@ -1,5 +1,9 @@
 package lk.sliit.hotel.dto.kitchen;
 
+import lk.sliit.hotelManagement.entity.kitchen.FoodItem;
+import lk.sliit.hotelManagement.entity.kitchen.Menu;
+import lk.sliit.hotelManagement.entity.kitchen.MenuDetailsPK;
+
 public class MenuDTO {
     private int menuId;
 

@@ -1,18 +1,15 @@
-package lk.sliit.hotel.controller.foodAndBevarage.RestaurantController;
+package lk.sliit.hotel.controller.RestaurantController;
 
+import lk.sliit.hotel.controller.SuperController;
+import lk.sliit.hotel.controller.kitchenController.KitchenUtil;
 import lk.sliit.hotel.dto.kitchen.FoodItemDTO;
+import lk.sliit.hotel.dto.kitchen.RestaurantFoodItemDTO;
+import lk.sliit.hotel.dto.kitchen.RestaurantFoodOrderDTO;
+import lk.sliit.hotel.dto.restaurant.restaurantCounterOrder.RestaurantCounterOrderDTO;
+import lk.sliit.hotel.dto.restaurant.restaurantCounterOrder.RestaurantCounterOrderDetailDTO;
 import lk.sliit.hotel.service.custom.IndexLoginBO;
 import lk.sliit.hotel.service.custom.KitchenBO;
 import lk.sliit.hotel.service.custom.RestaurantBO;
-import lk.sliit.hotelManagement.controller.SuperController;
-import lk.sliit.hotelManagement.dto.kitchen.FoodItemDTO;
-import lk.sliit.hotelManagement.dto.restaurant.restaurantCounterOrder.RestaurantCounterOrderDTO;
-import lk.sliit.hotelManagement.dto.restaurant.restaurantCounterOrder.RestaurantCounterOrderDetailDTO;
-import lk.sliit.hotelManagement.dto.restaurant.restaurantOnlineOrder.RestaurantOnlineOrderDTO;
-import lk.sliit.hotelManagement.dto.restaurant.restaurantOnlineTable.OnlineTableReservationDTO;
-import lk.sliit.hotelManagement.service.custom.IndexLoginBO;
-import lk.sliit.hotelManagement.service.custom.KitchenBO;
-import lk.sliit.hotelManagement.service.custom.RestaurantBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,9 +31,6 @@ public class RestaurantController {
     @Autowired
     IndexLoginBO indexLoginBO;
 
-
-
-
     //load restaurant dashboard
     @GetMapping("/restaurant")//Restaurant Dashboard
     public String loginPage(Model model) {
@@ -49,58 +43,60 @@ public class RestaurantController {
         model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
 
 
-        List<FoodItemDTO> p1 = foodItemService.findFoodItems();//Find Food Items
+        List<FoodItemDTO> p1 = kitchenBO.findFoodItems();//Find Food Items
         if (p1.isEmpty()) {
             request.setAttribute("loginError", "Not Any Fond Items" +
                     " Please Add Food Items ");
         }
         model.addAttribute("loadInventoryRestaurantTable", p1);//load Data to table
-        return "resturantOrder";
+        return "restaurantOrder";
     }
 
-    @PostMapping("/saveFoodItem")
-    public String addNew(Model model, @ModelAttribute FoodItemDTO foodItemDTO) {
-        // alertMsg = null;
-        //model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
-        // model.addAttribute("alert",alertMsg);
+
+//    @PostMapping("/saveFoodItem")
+//    public String addNew(Model model, @ModelAttribute FoodItemDTO foodItemDTO) {
+//         alertMsg = null;
+//        model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
+//         model.addAttribute("alert",alertMsg);
+//
+//        try {
+//            FoodItemDTO foodItemDTO2 = kitchenBO.findHighestId();
+//            FoodItemDTO foodItemDTO1 = null;
+//            try {
+//                foodItemDTO1 = kitchenBO.findFoodItemById(foodItemDTO.getItemId());
+//            }catch (NullPointerException d){
+//                int maxId = (foodItemDTO2.getItemId());
+//                if (foodItemDTO.getItemId()==(maxId)) {
+//                    foodItemDTO.setItemId((maxId));
+//                } else {
+//                    maxId++;
+//                    foodItemDTO.setItemId((maxId));
+//                }
+//            }
+//        } catch (NullPointerException e){
+//            foodItemDTO.setItemId(1);
+//        }
+//
+//        //model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
+//        foodItemService.saveFoodItem(foodItemDTO);
+//        return "redirect:/restaurantOrder";
+//    }
+
+    //print invoice
+    @PostMapping("invoice")
+    public String loadInvoicePage(@ModelAttribute RestaurantCounterOrderDTO restaurantCounterOrderDTO, Model model, HttpServletRequest request) {
+        model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
 
         try {
-            FoodItemDTO foodItemDTO2 = foodItemService.findHighestId();
-            FoodItemDTO foodItemDTO1 = null;
-            try {
-                foodItemDTO1 = foodItemService.findFoodItemById(foodItemDTO.getItemId());
-            }catch (NullPointerException d){
-                int maxId = (foodItemDTO2.getItemId());
-                if (foodItemDTO.getItemId()==(maxId)) {
-                    foodItemDTO.setItemId((maxId));
-                } else {
-                    maxId++;
-                    foodItemDTO.setItemId((maxId));
-                }
-            }
-        } catch (NullPointerException e){
-            foodItemDTO.setItemId(1);
-        }
-
-        //model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
-        foodItemService.saveFoodItem(foodItemDTO);
-        return "redirect:/restaurantOrder";
-    }
-
-    @PostMapping("invoice")//Print Invoice
-    public String loadInvoicePage(@ModelAttribute RestaurantCounterOrderDTO restaurantCounterOrderDTO, Model model, HttpServletRequest request) {
-        //model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
-
-        try { //
-            //restaurantCounterOrderDTO.setCustomerId(SuperController.idNo);
-            RestaurantCounterOrderDTO top = restaurantService.findTopByOrderByRestIdDesc();//find Highest Id to Save Order
+            restaurantCounterOrderDTO.setCustomerId(SuperController.idNo);
+            RestaurantCounterOrderDTO top = restaurantBO.findTopByOrderByRestIdDesc();//find Highest Id to Save Order
             int x = (top.getOrderId()) + 1;
             restaurantCounterOrderDTO.setOrderId((x));
         } catch (NullPointerException e) {
             restaurantCounterOrderDTO.setOrderId((1));//Set Id as 1 when Initial Round
         }
         try {
-            restaurantService.saveRestaurantOrder(restaurantCounterOrderDTO);
+            restaurantBO.saveRestaurantOrder(restaurantCounterOrderDTO);
 
             java.util.List<RestaurantCounterOrderDetailDTO> list = new ArrayList<>();
             String arr = restaurantCounterOrderDTO.getDataValue();
@@ -125,7 +121,7 @@ public class RestaurantController {
             }
 
             for (RestaurantCounterOrderDetailDTO d : list) {
-                FoodItemDTO f = foodItemService.findFoodItemById(d.getFoodItem());
+                FoodItemDTO f = kitchenBO.findFoodItemById(d.getFoodItem());
                 d.setName(f.getItemName());
             }
 
@@ -146,7 +142,7 @@ public class RestaurantController {
         // model.addAttribute("alert", alertMsg);
         // model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
 
-        List<RestaurantFoodOrderDTO> allFinishedOrders = restaurantService.findReportData(new java.util.Date());
+        List<RestaurantFoodOrderDTO> allFinishedOrders = restaurantBO.findResReportData(new java.util.Date());
         List<RestaurantFoodItemDTO> onlineItems = new ArrayList<>();
         List<RestaurantFoodItemDTO> counterItems = new ArrayList<>();
         List<RestaurantFoodItemDTO> finalList = new ArrayList<>();
@@ -259,7 +255,7 @@ public class RestaurantController {
         model.addAttribute("totalOnlineIncome", totalOnlineIncome);
         model.addAttribute("totalIncome", totalIncome);
 
-        return "RestaurantReport";
+        return "restaurantReport";
     }
 
 }

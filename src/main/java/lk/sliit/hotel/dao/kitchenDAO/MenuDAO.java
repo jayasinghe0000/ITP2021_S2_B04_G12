@@ -2,6 +2,7 @@ package lk.sliit.hotel.dao.kitchenDAO;
 
 
 import lk.sliit.hotelManagement.entity.kitchen.Menu;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface MenuDAO extends CrudRepository<Menu,Integer> {

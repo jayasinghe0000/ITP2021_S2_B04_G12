@@ -1,6 +1,13 @@
 package lk.sliit.hotel.entity.kitchen;
 
+import lk.sliit.hotelManagement.entity.banquet.BanquetOrder;
+import lk.sliit.hotelManagement.entity.barManage.BarOrderDetailsPK;
+import lk.sliit.hotelManagement.entity.barManage.BarOrders;
+import lk.sliit.hotelManagement.entity.inventory.Inventory;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class MenuDetails {

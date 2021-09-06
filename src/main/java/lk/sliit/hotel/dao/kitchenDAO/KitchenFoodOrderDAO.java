@@ -1,6 +1,5 @@
 package lk.sliit.hotel.dao.kitchenDAO;
 
-import lk.sliit.hotel.entity.kitchen.KitchenFoodOrders;
 import lk.sliit.hotelManagement.entity.kitchen.KitchenFoodOrders;
 import org.springframework.data.repository.CrudRepository;
 

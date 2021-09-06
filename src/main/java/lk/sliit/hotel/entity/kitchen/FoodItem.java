@@ -1,13 +1,11 @@
 package lk.sliit.hotel.entity.kitchen;
 
+import lk.sliit.hotelManagement.entity.barManage.BarOrderDetails;
 import lk.sliit.hotelManagement.entity.restaurant.Report;
 import lk.sliit.hotelManagement.entity.restaurant.counterOrder.RestaurantCounterOrderDetail;
 import lk.sliit.hotelManagement.entity.restaurant.onlineOrder.RestaurantOnlineOrderDetails;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
