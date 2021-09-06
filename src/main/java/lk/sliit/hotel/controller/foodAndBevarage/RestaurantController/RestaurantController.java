@@ -1,5 +1,6 @@
 package lk.sliit.hotel.controller.foodAndBevarage.RestaurantController;
 
+import lk.sliit.hotel.dto.kitchen.FoodItemDTO;
 import lk.sliit.hotel.service.custom.IndexLoginBO;
 import lk.sliit.hotel.service.custom.KitchenBO;
 import lk.sliit.hotel.service.custom.RestaurantBO;
