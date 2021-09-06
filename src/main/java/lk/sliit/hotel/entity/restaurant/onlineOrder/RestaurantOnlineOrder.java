@@ -1,6 +1,6 @@
 package lk.sliit.hotel.entity.restaurant.onlineOrder;
 
-import lk.sliit.hotelManagement.entity.restaurant.OnlineCustomer;
+import lk.sliit.hotel.entity.restaurant.OnlineCustomer;
 
 import javax.persistence.*;
 import java.util.ArrayList;

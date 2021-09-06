@@ -1,7 +1,7 @@
 package lk.sliit.hotel.dao.restaurantDAO.onlineTableReservationDAO;
 
 
-import lk.sliit.hotelManagement.entity.restaurant.onlineTableReservation.OnlineTableReservation;
+import lk.sliit.hotel.entity.restaurant.onlineTableReservation.OnlineTableReservation;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

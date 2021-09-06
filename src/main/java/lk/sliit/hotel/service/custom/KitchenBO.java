@@ -1,7 +1,9 @@
 package lk.sliit.hotel.service.custom;
 
 import lk.sliit.hotel.dto.kitchen.FoodItemDTO;
+import lk.sliit.hotel.dto.kitchen.KitchenFoodOrderDTO;
 import lk.sliit.hotel.dto.kitchen.MenuDTO;
+import lk.sliit.hotel.dto.kitchen.RestaurantFoodOrderDTO;
 import lk.sliit.hotel.service.SuperBO;
 import lk.sliit.hotelManagement.dto.banquet.BanquetAddDTO;
 import lk.sliit.hotelManagement.dto.banquet.LimitDTO;

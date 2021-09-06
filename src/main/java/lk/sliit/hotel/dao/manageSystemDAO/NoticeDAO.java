@@ -1,7 +1,7 @@
 package lk.sliit.hotel.dao.manageSystemDAO;
 
 
-import lk.sliit.hotelManagement.entity.manager.Notice;
+import lk.sliit.hotel.entity.manager.Notice;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;

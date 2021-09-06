@@ -1,5 +1,6 @@
 package lk.sliit.hotel.service.custom.impl;
 
+import lk.sliit.hotel.controller.kitchenController.KitchenUtil;
 import lk.sliit.hotel.dao.kitchenDAO.KitchenDAO;
 import lk.sliit.hotel.dao.restaurantDAO.OnlineCustomerDAO;
 import lk.sliit.hotel.dao.restaurantDAO.RestaurantTableDAO;
@@ -12,14 +13,17 @@ import lk.sliit.hotel.dao.restaurantDAO.onlineOrderDAO.RestaurantOnlineOrderDeta
 import lk.sliit.hotel.dao.restaurantDAO.onlineTableReservationDAO.OnlineTableReservationDAO;
 import lk.sliit.hotel.dao.restaurantDAO.onlineTableReservationDAO.OnlineTableReservationDetailsDAO;
 import lk.sliit.hotel.dto.kitchen.FoodItemDTO;
+import lk.sliit.hotel.dto.kitchen.RestaurantFoodItemDTO;
 import lk.sliit.hotel.dto.kitchen.RestaurantFoodOrderDTO;
 import lk.sliit.hotel.dto.restaurant.RestaurantTableDTO;
 import lk.sliit.hotel.dto.restaurant.restaurantCounterOrder.RestaurantCounterOrderDTO;
 import lk.sliit.hotel.dto.restaurant.restaurantCounterOrder.RestaurantCounterOrderDetailDTO;
 import lk.sliit.hotel.dto.restaurant.restaurantCounterTable.CounterTableReservationDTO;
+import lk.sliit.hotel.dto.restaurant.restaurantCounterTable.CounterTableReservationDetailsDTO;
 import lk.sliit.hotel.dto.restaurant.restaurantOnlineOrder.RestaurantOnlineOrderDTO;
 import lk.sliit.hotel.dto.restaurant.restaurantOnlineOrder.RestaurantOnlineOrderDetailsDTO;
 import lk.sliit.hotel.dto.restaurant.restaurantOnlineTable.OnlineTableReservationDTO;
+import lk.sliit.hotel.dto.restaurant.restaurantOnlineTable.OnlineTableReservationDetailsDTO;
 import lk.sliit.hotel.entity.kitchen.FoodItem;
 import lk.sliit.hotel.entity.restaurant.RestaurantTable;
 import lk.sliit.hotel.entity.restaurant.counterOrder.RestaurantCounterOrder;
@@ -71,6 +75,15 @@ public class RestaurantBOImpl implements RestaurantBO {
     @Autowired
     OnlineCustomerDAO onlineCustomerDAO;
 
+    @Autowired
+    RestaurantOnlineOrderDAO onlineOrderDAO;
+
+    @Autowired
+    RestaurantCounterOrderDAO counterOrderDAO;
+
+
+
+    //find top order id to save
     @Override
     public RestaurantCounterOrderDTO findTopByOrderByRestIdDesc() {
 
@@ -83,11 +96,11 @@ public class RestaurantBOImpl implements RestaurantBO {
         return new RestaurantCounterOrderDTO(
                 orders.getOrderId()
         );
-    }//End
+    }
 
-
+    //save counter order
     @Transactional
-    @Override//SAve Counter Order
+    @Override
     public void saveRestaurantOrder(RestaurantCounterOrderDTO restaurantCounterOrderDTO) {
         List<RestaurantCounterOrderDetailDTO> list = new ArrayList<>();
         String arr = restaurantCounterOrderDTO.getDataValue();
@@ -131,7 +144,7 @@ public class RestaurantBOImpl implements RestaurantBO {
         }
     }
 
-
+    //find all food items
     @Override
     public List<FoodItemDTO> findAllFoodItems(String restaurant) {
         Iterable<FoodItem> all = foodItem.findAllByCategoryEquals(restaurant);
@@ -148,6 +161,7 @@ public class RestaurantBOImpl implements RestaurantBO {
         return dtos;
     }
 
+    //find all tables
     @Override
     public List<RestaurantTableDTO> findAllTable() {
         Iterable<RestaurantTable> all = restaurantTableDAO.findAll();
@@ -163,6 +177,7 @@ public class RestaurantBOImpl implements RestaurantBO {
     }
 
 
+    //find highest online order id to save
     @Override
     public RestaurantOnlineOrderDTO findHighestOnlineOrderId() {
         RestaurantOnlineOrder orders = null;
@@ -174,9 +189,10 @@ public class RestaurantBOImpl implements RestaurantBO {
         return new RestaurantOnlineOrderDTO(
                 orders.getOrderId()
         );
-    }//End
+    }
 
 
+    //save online orders
     @Override
     public void saveOnlineOrder(RestaurantOnlineOrderDTO onlineOrderDTO) {//place Restaurant Online Order
         List<RestaurantOnlineOrderDetailsDTO> list = new ArrayList<>();
@@ -221,7 +237,169 @@ public class RestaurantBOImpl implements RestaurantBO {
         }
     }
 
+    //restaurant report
+    @Override
+    public List<RestaurantFoodOrderDTO> findResReportData(java.util.Date date) {
+        List<RestaurantFoodOrderDTO> returnlist = new ArrayList<>();
+        List<RestaurantFoodItemDTO> foodItemDTOS, selectedList;
+        RestaurantFoodOrderDTO order;
 
+        try {
+            Iterable<RestaurantOnlineOrder> onlineOrders = onlineOrderDAO.findAllByOrderStateEquals(KitchenUtil.finishedState);
+            foodItemDTOS = new ArrayList<>();
+            selectedList = new ArrayList<>();
+
+            for (RestaurantOnlineOrder item : onlineOrders) {
+                java.util.Date comp = item.getDate();
+
+                if (date.getYear() == comp.getYear()
+                        && date.getMonth() == comp.getMonth()
+                        && date.getDate() == comp.getDate()) {
+
+                    //load order details
+                    Iterable<RestaurantOnlineOrderDetails> details = onlineOrderDetailsDAO.findAllByRestaurantOnlineOrderEquals(item);
+                    for (RestaurantOnlineOrderDetails detail : details) {
+
+                        foodItemDTOS.add(new RestaurantFoodItemDTO(
+                                detail.getFoodItem().getItemId(),
+                                item.getOrderId(),
+                                detail.getFoodItem().getName(),
+                                detail.getQuantity(),
+                                detail.getUnitePrice()
+                        ));
+
+                    }
+
+                }
+
+            }
+
+            //set food item list
+
+            if (!foodItemDTOS.isEmpty()){
+
+                while (!foodItemDTOS.isEmpty()){
+                    //select 1st item
+                    RestaurantFoodItemDTO selectedItem = foodItemDTOS.remove(0);
+                    List<RestaurantFoodItemDTO> remove = new ArrayList<>();
+
+                    //get total food item info
+                    if (!foodItemDTOS.isEmpty()){
+
+                        for (RestaurantFoodItemDTO item:foodItemDTOS){
+                            if (selectedItem.getFoodItemId() == item.getFoodItemId()){
+                                selectedItem.setQuantity(item.getQuantity() + selectedItem.getQuantity());
+                                remove.add(item);
+                            }
+                        }
+                    }
+
+
+                    //remove selected item from foodItemDTOS
+                    if (!remove.isEmpty())
+                        foodItemDTOS.removeAll(remove);
+
+                    selectedList.add(selectedItem);
+
+                }
+
+                //set total price
+                for (RestaurantFoodItemDTO item:selectedList){
+                    item.setTotalPrice(item.getQuantity() * item.getPrice());
+                }
+            }
+
+            order = new RestaurantFoodOrderDTO();
+            order.setFoodItems(selectedList);
+            order.setType(KitchenUtil.onlineType);
+            returnlist.add(order);
+
+        } catch (
+                NullPointerException e) {
+        }
+
+        //load counter finished orders
+        try {
+            Iterable<RestaurantCounterOrder> coubterOrders = counterOrderDAO.findAllByOrderStateEquals(KitchenUtil.finishedState);
+            foodItemDTOS = new ArrayList<>();
+            selectedList = new ArrayList<>();
+
+            for (RestaurantCounterOrder item : coubterOrders) {
+                java.util.Date comp = item.getDate();
+
+                if (date.getYear() == comp.getYear()
+                        && date.getMonth() == comp.getMonth()
+                        && date.getDate() == comp.getDate()) {
+
+                    //load order details
+                    Iterable<RestaurantCounterOrderDetail> details = restaurantCounterOrderDetail.findAllByRestaurantCounterOrderEquals(item);
+
+                    for (RestaurantCounterOrderDetail detail : details) {
+
+                        foodItemDTOS.add(new RestaurantFoodItemDTO(
+                                detail.getFoodItem().getItemId(),
+                                item.getOrderId(),
+                                detail.getFoodItem().getName(),
+                                detail.getQuantity(),
+                                detail.getUnitePrice()
+                        ));
+
+                    }
+
+                }
+            }
+
+            //set food item list
+            if (!foodItemDTOS.isEmpty()){
+
+                while (!foodItemDTOS.isEmpty()){
+                    //select 1st item
+                    RestaurantFoodItemDTO selectedItem = foodItemDTOS.remove(0);
+                    List<RestaurantFoodItemDTO> remove = new ArrayList<>();
+
+                    //get total food item info
+                    if (!foodItemDTOS.isEmpty()){
+
+                        for (RestaurantFoodItemDTO item:foodItemDTOS){
+                            if (selectedItem.getFoodItemId() == item.getFoodItemId()){
+                                selectedItem.setQuantity(item.getQuantity() + selectedItem.getQuantity());
+                                remove.add(item);
+                            }
+                        }
+                    }
+
+
+                    //remove selected item from foodItemDTOS
+                    if (!remove.isEmpty())
+                        foodItemDTOS.removeAll(remove);
+
+                    selectedList.add(selectedItem);
+
+                }
+
+                //set total price
+                for (RestaurantFoodItemDTO item:selectedList){
+                    item.setTotalPrice(item.getQuantity() * item.getPrice());
+                }
+
+            }
+            order = new RestaurantFoodOrderDTO();
+            order.setType(KitchenUtil.counterType);
+            order.setFoodItems(selectedList);
+            returnlist.add(order);
+
+        } catch (
+                NullPointerException e) {
+        }
+
+        return returnlist;
+    }
+
+
+
+
+
+    //get available tables
     @Override
     public List<RestaurantTableDTO> getAviTables(java.util.Date date, java.util.Date startTime, java.util.Date endTime) {
 //Find Book Table in online table reservation
@@ -278,7 +456,8 @@ public class RestaurantBOImpl implements RestaurantBO {
         return dtoList;
     }
 
-    @Override//Find Booked Table
+    //Find Booked Tables
+    @Override
     public List<CounterTableReservationDTO> getBookedTables() {
         java.util.Date date = new java.util.Date();
         List<CounterTableReservationDTO> list = new ArrayList<>();
@@ -324,7 +503,8 @@ public class RestaurantBOImpl implements RestaurantBO {
         return list;
     }
 
-    @Override//SAve Table In counter
+    //save counter reservations
+    @Override
     public void saveCounterTableId(CounterTableReservationDTO onlineOrderDTO) {
         List<CounterTableReservationDetailsDTO> list = new ArrayList<>();
         String arr = onlineOrderDTO.getOrderData();
@@ -362,6 +542,7 @@ public class RestaurantBOImpl implements RestaurantBO {
         }
     }
 
+    //save online reservations
     @Override
     public void saveOnlineTableId(OnlineTableReservationDTO onlineOrderDTO) {//SAve Table In online
         List<OnlineTableReservationDetailsDTO> list = new ArrayList<>();
@@ -443,10 +624,9 @@ public class RestaurantBOImpl implements RestaurantBO {
         return tableDTOList;
     }
 
-    @Override
-    public List<RestaurantFoodOrderDTO> findReportData(java.util.Date date) {
 
-    }
+
+
 
 
     @Override//Find Highest Table Id
@@ -468,14 +648,15 @@ public class RestaurantBOImpl implements RestaurantBO {
     }
 
 
-
-    @Override//Delete table
+    //Delete table
+    @Override
     public void deleteTable(int tableId) {
         restaurantTableDAO.delete(tableId);
     }
 
+    //Find Table (find One)
     @Override
-    public RestaurantTableDTO findTableById(int tableId) { //Find Table (find One)
+    public RestaurantTableDTO findTableById(int tableId) {
         RestaurantTable table = restaurantTableDAO.findOne(tableId);
         return new RestaurantTableDTO(
                 table.getTableId(),
@@ -484,8 +665,9 @@ public class RestaurantBOImpl implements RestaurantBO {
         );
     }
 
+    //Find Highest Online table Id
     @Override
-    public OnlineTableReservationDTO findHighestOnlineTableId() {//Find Highest Online table Id
+    public OnlineTableReservationDTO findHighestOnlineTableId() {
         OnlineTableReservation lastItem = null;
         try {
             lastItem = onlineTableReservationDAO.findTopByOrderByOnlineTableReservationIdDesc();
@@ -495,8 +677,9 @@ public class RestaurantBOImpl implements RestaurantBO {
         return new OnlineTableReservationDTO(lastItem.getOnlineTableReservationId());
     }
 
+    //Find highest counter table reservation Dto
     @Override
-    public CounterTableReservationDTO findHighestCounterTableId() {//Find highest counter table reservation Dto
+    public CounterTableReservationDTO findHighestCounterTableId() {
         CounterTableReservation lastItem = null;
         try {
             lastItem = counterTableReservationDAO.findTopByOrderByCounterTableReserveIdDesc();

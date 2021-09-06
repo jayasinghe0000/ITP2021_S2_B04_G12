@@ -1,6 +1,6 @@
 package lk.sliit.hotel.entity.restaurant;
 
-import lk.sliit.hotelManagement.entity.kitchen.FoodItem;
+import lk.sliit.hotel.entity.kitchen.FoodItem;
 
 import javax.persistence.*;
 import java.sql.Date;
