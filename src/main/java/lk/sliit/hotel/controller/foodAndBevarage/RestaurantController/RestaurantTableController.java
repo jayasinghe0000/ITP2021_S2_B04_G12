@@ -1,4 +1,4 @@
-package lk.sliit.hotel.controller.foodAndBevarage.Restaurant;
+package lk.sliit.hotel.controller.foodAndBevarage.RestaurantController;
 
 import lk.sliit.hotelManagement.controller.SuperController;
 import lk.sliit.hotelManagement.dto.restaurant.RestaurantTableDTO;
