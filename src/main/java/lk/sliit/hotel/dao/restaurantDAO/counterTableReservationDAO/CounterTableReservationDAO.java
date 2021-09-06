@@ -1,6 +1,6 @@
 package lk.sliit.hotel.dao.restaurantDAO.counterTableReservationDAO;
 
-import lk.sliit.hotelManagement.entity.restaurant.counterTableReservation.CounterTableReservation;
+import lk.sliit.hotel.entity.restaurant.counterTableReservation.CounterTableReservation;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

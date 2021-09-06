@@ -1,6 +1,6 @@
 package lk.sliit.hotel.dao.restaurantDAO.onlineOrderDAO;
 
-import lk.sliit.hotelManagement.entity.restaurant.onlineOrder.RestaurantOnlineOrder;
+import lk.sliit.hotel.entity.restaurant.onlineOrder.RestaurantOnlineOrder;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;

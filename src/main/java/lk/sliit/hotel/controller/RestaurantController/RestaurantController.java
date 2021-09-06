@@ -1,8 +1,12 @@
 package lk.sliit.hotel.controller.RestaurantController;
 
 import lk.sliit.hotel.controller.SuperController;
+import lk.sliit.hotel.controller.kitchenController.KitchenUtil;
 import lk.sliit.hotel.dto.kitchen.FoodItemDTO;
+import lk.sliit.hotel.dto.kitchen.RestaurantFoodItemDTO;
+import lk.sliit.hotel.dto.kitchen.RestaurantFoodOrderDTO;
 import lk.sliit.hotel.dto.restaurant.restaurantCounterOrder.RestaurantCounterOrderDTO;
+import lk.sliit.hotel.dto.restaurant.restaurantCounterOrder.RestaurantCounterOrderDetailDTO;
 import lk.sliit.hotel.service.custom.IndexLoginBO;
 import lk.sliit.hotel.service.custom.KitchenBO;
 import lk.sliit.hotel.service.custom.RestaurantBO;
@@ -92,7 +96,7 @@ public class RestaurantController {
             restaurantCounterOrderDTO.setOrderId((1));//Set Id as 1 when Initial Round
         }
         try {
-            restaurantService.saveRestaurantOrder(restaurantCounterOrderDTO);
+            restaurantBO.saveRestaurantOrder(restaurantCounterOrderDTO);
 
             java.util.List<RestaurantCounterOrderDetailDTO> list = new ArrayList<>();
             String arr = restaurantCounterOrderDTO.getDataValue();
@@ -117,7 +121,7 @@ public class RestaurantController {
             }
 
             for (RestaurantCounterOrderDetailDTO d : list) {
-                FoodItemDTO f = foodItemService.findFoodItemById(d.getFoodItem());
+                FoodItemDTO f = kitchenBO.findFoodItemById(d.getFoodItem());
                 d.setName(f.getItemName());
             }
 
@@ -138,7 +142,7 @@ public class RestaurantController {
         // model.addAttribute("alert", alertMsg);
         // model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
 
-        List<RestaurantFoodOrderDTO> allFinishedOrders = restaurantService.findReportData(new java.util.Date());
+        List<RestaurantFoodOrderDTO> allFinishedOrders = restaurantBO.findResReportData(new java.util.Date());
         List<RestaurantFoodItemDTO> onlineItems = new ArrayList<>();
         List<RestaurantFoodItemDTO> counterItems = new ArrayList<>();
         List<RestaurantFoodItemDTO> finalList = new ArrayList<>();
@@ -251,7 +255,7 @@ public class RestaurantController {
         model.addAttribute("totalOnlineIncome", totalOnlineIncome);
         model.addAttribute("totalIncome", totalIncome);
 
-        return "RestaurantReport";
+        return "restaurantReport";
     }
 
 }
