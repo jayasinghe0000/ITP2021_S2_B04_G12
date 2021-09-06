@@ -2,6 +2,7 @@ package lk.sliit.hotel.controller.RestaurantController;
 
 import lk.sliit.hotel.controller.SuperController;
 import lk.sliit.hotel.dto.kitchen.FoodItemDTO;
+import lk.sliit.hotel.dto.restaurant.restaurantCounterOrder.RestaurantCounterOrderDTO;
 import lk.sliit.hotel.service.custom.IndexLoginBO;
 import lk.sliit.hotel.service.custom.KitchenBO;
 import lk.sliit.hotel.service.custom.RestaurantBO;
@@ -84,7 +85,7 @@ public class RestaurantController {
 
         try {
             restaurantCounterOrderDTO.setCustomerId(SuperController.idNo);
-            RestaurantCounterOrderDTO top = restaurantService.findTopByOrderByRestIdDesc();//find Highest Id to Save Order
+            RestaurantCounterOrderDTO top = restaurantBO.findTopByOrderByRestIdDesc();//find Highest Id to Save Order
             int x = (top.getOrderId()) + 1;
             restaurantCounterOrderDTO.setOrderId((x));
         } catch (NullPointerException e) {
