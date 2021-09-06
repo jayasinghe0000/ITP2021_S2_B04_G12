@@ -1,4 +1,4 @@
-package lk.sliit.hotel.controller.foodAndBevarage;
+package lk.sliit.hotel.controller;
 
 import lk.sliit.hotelManagement.controller.SuperController;
 import lk.sliit.hotelManagement.service.custom.IndexLoginBO;
