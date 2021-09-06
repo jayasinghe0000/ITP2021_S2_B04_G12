@@ -1,4 +1,4 @@
-package lk.sliit.hotel.service.custom.impl;
+package lk.sliit.hotel.service.custom;
 
 import lk.sliit.hotelManagement.dto.banquet.BanquetAddDTO;
 import lk.sliit.hotelManagement.dto.banquet.LimitDTO;
