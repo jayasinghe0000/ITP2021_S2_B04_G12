@@ -1,7 +1,7 @@
 package lk.sliit.hotel.dao.kitchenDAO;
 
 
-import lk.sliit.hotelManagement.entity.kitchen.FoodItem;
+import lk.sliit.hotel.entity.kitchen.FoodItem;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
