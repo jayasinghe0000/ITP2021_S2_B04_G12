@@ -1,5 +1,6 @@
 package lk.sliit.hotel.controller.foodAndBevarage.RestaurantController;
 
+import lk.sliit.hotel.controller.SuperController;
 import lk.sliit.hotel.dto.kitchen.FoodItemDTO;
 import lk.sliit.hotel.service.custom.IndexLoginBO;
 import lk.sliit.hotel.service.custom.KitchenBO;
@@ -49,7 +50,7 @@ public class RestaurantController {
         model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
 
 
-        List<FoodItemDTO> p1 = foodItemService.findFoodItems();//Find Food Items
+        List<FoodItemDTO> p1 = kitchenBO.findFoodItems();//Find Food Items
         if (p1.isEmpty()) {
             request.setAttribute("loginError", "Not Any Fond Items" +
                     " Please Add Food Items ");
