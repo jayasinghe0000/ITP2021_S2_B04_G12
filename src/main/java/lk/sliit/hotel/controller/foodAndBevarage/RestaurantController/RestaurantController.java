@@ -36,20 +36,6 @@ public class RestaurantController {
 
 
 
-    //load fooditem form
-    @GetMapping("/manageMenu")
-    public String loginPage(Model model) {
-        alertMsg = null;
-        model.addAttribute("loggerName", indexLoginBO.getEmployeeByIdNo(SuperController.idNo));
-        model.addAttribute("alert",alertMsg);
-
-        //List<FoodItemDTO> foodItemList = foodItemService.findFoodItems();
-        FoodItemDTO foodItemDTO = new FoodItemDTO();
-        model.addAttribute("foodItemDTO", foodItemDTO);
-        //model.addAttribute("loadFoodItemTable", foodItemList);
-        //model.addAttribute("foodItemCategories", KitchenUtil.foodItemCategories);
-        return "FoodItemForm";
-    }
 
     //load restaurant dashboard
     @GetMapping("/restaurant")//Restaurant Dashboard
